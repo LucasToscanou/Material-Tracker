@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/ExtremeFormsApp/favicon.ico' %}" type="image/x-icon">
+    <title>Index</title>
+    <link rel="stylesheet" href="{% static 'css/ExtremeFormsApp/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ExtremeFormsApp/general.css' %}">
+</head>
+<body>
+    <div class="content">
+        {% include 'ExtremeFormsApp/links.html' %}
+        <h1>ExtremeForms</h1>
+        <p class="datetime">{% now "Y-m-d H:i:s" %}</p>
+        <div class="logo-container">
+            <img class="logo" src="{% static 'img/ExtremeFormsApp/ExtremeFormsLogo.png' %}" alt="ExtremeForms Logo">
+        </div>
+        <div class="intro-text">
+            Bem-vindo ao Extreme Forms!
+            No Extreme Forms, levamos os formulários online ao extremo, mas sem complicações! Se você precisa de uma pesquisa rápida, um formulário de feedback ou uma maneira fácil de coletar informações, estamos aqui para ajudar. Com uma interface simples e direta, você pode criar formulários em poucos cliques, sem perder tempo com configurações complicadas.
+        </div>
+        <div class="button-group">
+            {% if user.is_authenticated %}
+            <button class="button" onclick="window.location.href='{% url 'ExtremeFormsApp:new_form' %}'">Novo Form</button>
+            <button class="button" onclick="window.location.href='{% url 'ExtremeFormsApp:user_forms' %}'">Meus Forms</button>
+            {% else %}
+            <button class="button" onclick="window.location.href='{% url 'sec-login' %}'">Fazer Login</button>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

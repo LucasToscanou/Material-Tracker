@@ -1,0 +1,68 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Form Initiated</title>
+    <link rel="stylesheet" href="{% static 'css/ExtremeFormsApp/new_form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ExtremeFormsApp/general.css' %}">
+</head>
+
+<body>
+    <div class="content">
+        {% include 'ExtremeFormsApp/links.html' %}
+        <h1>Form {{ question_list.name }}</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="toolbar">
+                <button type="submit" name="action" value="add-multiple-choice" class="toolbar_btn">Adicionar Questão de Múltipla Escolha</button>
+                <button type="submit" name="action" value="add-long-answer" class="toolbar_btn">Adicionar Questão de Resposta Longa</button>
+                <button type="submit" name="action" value="finish" class="toolbar_btn">Concluir</button>
+            </div>
+        </form>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for question, question_type, options in questions_with_options %}
+            <div>
+                <h2>Questão {{ forloop.counter }}</h2>
+
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+
+                {% if question_type == 'title' %}
+                <input type="text" name="question_text" value="{{ question.text }}" placeholder="Título da pergunta" class="question-input">
+                {% elif question_type == 'multiple_choice' %}
+                <input type="text" name="question_text" value="{{ question.text }}" placeholder="Texto da pergunta" class="question-input">
+                <ul class="option-list">
+                    {% for label, option in options %}
+                    <li class="option-item">
+                        <span class="option-letter">{{ label }}.</span>
+                        <input type="text" name="option_text_{{ forloop.counter0 }}" value="{{ option }}" placeholder="Opção {{ label }}" class="option-input">
+                    </li>
+                    {% empty %}
+                    <li class="option-item">No options yet.</li>
+                    {% endfor %}
+                </ul>
+
+                <button type="submit" name="action" value="add-option" class="toolbar_btn">Adicionar Opção</button>
+                <button type="submit" name="action" value="remove-last-option" class="toolbar_btn">Remover Opção</button>
+                <button type="submit" name="action" value="remove-question" class="toolbar_btn">Remover Questão</button>
+                {% elif question_type == 'long_answer' %}
+                <div class="long-answer-input">
+                    <input type="text" name="question_text" value="{{ question.text }}" placeholder="Texto da pergunta" class="question-input">
+                </div>
+                <button type="submit" name="action" value="remove-question" class="toolbar_btn">Remover Questão</button>
+                {% endif %}
+
+                <button type="submit" name="action" value="save" class="toolbar_btn">Salvar</button>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+</body>
+
+</html>

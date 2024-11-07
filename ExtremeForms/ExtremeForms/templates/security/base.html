@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'ExtremeForms/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ExtremeFormsApp/general.css' %}">
+</head>
+<body>
+    <div class="content">
+        <div class="dev_navbar">
+            <a href="{% url 'ExtremeFormsApp:index' %}" class="dev_nav-link">HomePage</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'sec-user_page' %}" class="dev_nav-link">Página do Usuário</a>
+            {% else %}
+                <a href="{% url 'register' %}" class="dev_nav-link">Registrar</a>
+            {% endif %}
+
+            <a href="{% url 'sec-login' %}" class="dev_nav-link user-info" title="Ir para o login">
+                {% if user.is_authenticated %}
+                    Usuário: {{ user.username }}
+                {% else %}
+                    Visitante
+                {% endif %}
+            </a>
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
